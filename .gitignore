@@ -29,6 +29,7 @@ dist
 *.njsproj
 *.sln
 *.sw?
+*.tsbuildinfo
 
 # Secrets
 .env

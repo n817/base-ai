@@ -61,6 +61,13 @@
 .chat__list-item {
   max-width: 220px;
   width: 100%;
+  display: block;
+  font-size: inherit;
+  color: inherit;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   border-radius: 4px;
   padding: 10px 12px;
 }
@@ -72,7 +79,11 @@
 
 .chat__list-item:hover {
   color: rgb(161, 121, 217);
-  cursor: pointer;
+}
+
+.chat__list-item:focus-visible {
+  outline: 2px solid rgb(150 121 217);
+  outline-offset: -2px;
 }
 
 .chat__main {
@@ -82,7 +93,8 @@
   overflow: hidden;
   max-width: 670px;
   width: 100%;
-  padding-bottom: 265px;
+  /* Room for the fixed input bar: its height (set from Chat.tsx) + bottom offset */
+  padding-bottom: calc(var(--input-height, 100px) + 165px);
   margin: 0 auto;
 }
 
@@ -240,23 +252,28 @@
 
 .chat__input-bar {
   max-width: 670px;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: fixed;
+  left: 0;
+  right: 0;
   bottom: 114px;
   z-index: 2;
+  margin: 0 auto;
 }
 
 .chat__input {
-  height: 100px;
+  min-height: 100px;
+  max-height: 40vh;
   width: 100%;
+  resize: none;
+  overflow-y: auto;
   font-size: 18px;
   border: 1px solid rgb(28 28 28 / 0.5);
   border-radius: 10px;
-  padding: 10px 16px;
+  padding: 10px 48px 10px 16px;
 }
 
 .chat__send-button {
@@ -273,45 +290,125 @@
   opacity: 1;
 }
 
-.chat__message_type_thinking {
-  font-style: italic;
-  opacity: 0.6;
-}
-
 @media (max-width: 1200px) {
-  .chat__sidebar {
-    max-height: 70%;
-    max-width: 255px;
-    width: 75%;
-    display: flex;
-    flex-direction: column;
-    top: 47px;
-    left: 0;
-    background: #fff;
-    transform: translateX(-100%);
-    transition: transform 0.25s ease;
-    overflow-y: auto;
-    padding: 16px 0 0 16px;
-    z-index: 1;
-  }
-
-  .chat__sidebar_is-open {
-    transform: translateX(0);
-  }
-
   .chat__container_type_messages {
-    margin-left: 0;
     padding: 16px;
   }
 
   .chat__input-bar {
     padding-left: 16px;
     padding-right: 16px;
-    margin-left: 0;
+  }
+
+  .chat__send-button {
+    right: 32px;
+  }
+}
+
+/* Tablet: sidebar stays visible, chat shifts right so they don't overlap */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .chat {
+    padding-left: 240px;
+  }
+
+  /* Match .chat__main: 20px layout padding + 240px sidebar offset */
+  .chat__input-bar {
+    left: 260px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .chat::after {
+    height: 200px;
+  }
+
+  .chat__main {
+    padding-bottom: calc(var(--input-height, 88px) + 62px);
+  }
+
+  .chat__sidebar {
+    bottom: var(--mobile-nav-height);
+    max-width: 255px;
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    top: var(--header-height-mobile);
+    left: 0;
+    background: #fff;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    overflow-y: auto;
+    padding: 16px 0 0 16px;
+    z-index: 5; /* stacks onto the header nav drawer, leaving its links visible */
+  }
+
+  .chat__sidebar_is-open {
+    transform: translateX(0);
+  }
+
+  /* No chat open: the chat list is the page itself instead of a drawer */
+  .chat_type_list::after,
+  .chat_type_list .chat__main {
+    display: none;
+  }
+
+  .chat_type_list {
+    min-width: 0; /* let long chat titles truncate instead of widening the page */
+  }
+
+  .chat_type_list .chat__sidebar {
+    position: static;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    transition: none;
+    padding: 16px 0 24px;
+    z-index: auto;
+  }
+
+  .chat_type_list .chat__new-button,
+  .chat_type_list .chat__list-item {
+    max-width: none;
+  }
+
+  .chat_type_list .chat__list-item {
+    padding: 14px 12px;
+  }
+
+  .chat_type_list .chat__title-input {
+    width: 100%;
+    font-size: 16px;
+    border: 1px solid rgb(28 28 28 / 0.3);
+    border-radius: 4px;
+    padding: 9px 12px;
+  }
+
+  .chat__container_type_messages {
+    padding: 16px 0;
   }
 
   .chat__container_type_no-messages,
   .chat__container_type_error {
-    margin-left: 0;
+    margin-top: 80px;
+  }
+
+  .chat__title {
+    font-size: 24px;
+  }
+
+  .chat__input-bar {
+    bottom: 16px;
+  }
+
+  .chat__input {
+    min-height: 88px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat__message_type_user {
+    max-width: 85%;
   }
 }

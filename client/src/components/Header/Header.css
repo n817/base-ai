@@ -7,11 +7,14 @@
 
 .header__menu-btn {
   display: none;
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
   background-image: url("../../assets/menu.svg");
   background-repeat: no-repeat;
-  background-size: contain;
+  background-position: center;
+  background-size: 24px;
+  margin-left: -8px;
 }
 
 .header__logo {
@@ -120,41 +123,61 @@
   background: rgba(28, 28, 28, 0.05);
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 768px) {
   .header {
+    height: var(--header-height-mobile);
     justify-content: flex-start;
-    gap: 12px;
+    gap: 8px;
     position: relative;
+    z-index: 4; /* drawer above backdrop, chat fade and input bar */
     border-bottom: 1px solid rgb(0 0 0 / 0.1);
+    padding: 0 16px;
   }
 
-  .header_type_mobile {
-    justify-content: flex-start;
+  .header__logo {
+    width: 56px;
+    height: 40px;
   }
 
   .header__menu-btn {
     display: block;
   }
 
-  .header__nav_type_mobile {
+  /* Off-canvas drawer; visibility keeps hidden links out of the tab order */
+  .header__nav {
     min-height: 164px;
     max-width: 255px;
     width: 100%;
     flex-direction: column;
     gap: 7px;
-    justify-content: end;
     align-items: start;
     background: #fff;
     position: fixed;
-    top: 47px;
+    top: var(--header-height-mobile);
     bottom: 0;
     left: 0;
     border-top: 1px solid rgb(0 0 0 / 0.1);
-    padding: 7px 0 77px 16px;
+    padding: 16px 0 24px 16px;
     z-index: 1;
+    visibility: hidden;
+    transform: translateX(-100%);
+    transition:
+      transform 0.25s ease,
+      visibility 0.25s;
   }
 
-  .header__nav_type_mobile::before {
+  .header__nav_type_mobile {
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  /* In an open chat the chat list fills the top of the drawer, so pin the links to the bottom */
+  .app-layout:has(.chat:not(.chat_type_list)) .header__nav {
+    justify-content: end;
+    padding-top: 7px;
+  }
+
+  .app-layout:has(.chat:not(.chat_type_list)) .header__nav::before {
     content: "";
     display: block;
     height: 1px;
