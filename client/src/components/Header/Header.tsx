@@ -33,8 +33,9 @@ export default function Header({
       <button
         type="button"
         className="header__menu-btn"
-        aria-label="Open menu"
-        onClick={onMenuOpen}
+        aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+        aria-expanded={isMobileMenuOpen}
+        onClick={isMobileMenuOpen ? onMenuClose : onMenuOpen}
       />
       <img src={Logo} alt="bioAI logo" className="header__logo" />
       <nav

@@ -12,6 +12,19 @@
   padding: 0;
 }
 
+
+/*
+ * Breakpoints (custom properties can't be used in @media, so keep these in sync):
+ *   max-width: 1200px -> tablet: tighter page padding
+ *   max-width:  768px -> mobile: burger menu, off-canvas drawer and chat sidebar
+ *   max-width:  480px -> small phone: stacked cards, compact forms
+ */
+:root {
+  --header-height-mobile: 57px;
+  /* Height of the nav links block at the bottom of the mobile drawer */
+  --mobile-nav-height: 170px;
+}
+
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;

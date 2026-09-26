@@ -135,7 +135,7 @@
   .form {
     border: none;
     box-shadow: none;
-    padding: 0;
+    padding: 24px 16px 32px;
   }
 
   .form__description {

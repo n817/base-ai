@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useNavigate, useOutletContext } from "react-router";
 import ReactMarkdown from "react-markdown";
 
@@ -44,6 +44,8 @@ export default function Chat() {
 
   const navigate = useNavigate();
   const messagesEndRef = useRef<HTMLLIElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   // Load existing chats list
   useEffect(() => {
@@ -86,6 +88,16 @@ export default function Chat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Grow the input with its content (min/max height are set in CSS) and expose
+  // its height so the message list can reserve space under the fixed input bar
+  useLayoutEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight + el.offsetHeight - el.clientHeight}px`;
+    chatRef.current?.style.setProperty("--input-height", `${el.offsetHeight}px`);
+  }, [input]);
 
   // Create new chat
   const handleCreateChat = async () => {
@@ -156,7 +168,10 @@ export default function Chat() {
   };
 
   return (
-    <div className="chat">
+    <div
+      className={`chat${activeChatId ? "" : " chat_type_list"}`}
+      ref={chatRef}
+    >
       {/* Sidebar */}
       <aside
         className={`chat__sidebar${
@@ -194,19 +209,23 @@ export default function Chat() {
 
         <ul className="chat__list">
           {chats.map((c) => (
-            <li
-              key={c._id}
-              className={
-                c._id === activeChatId
-                  ? "chat__list-item chat__list-item_active"
-                  : "chat__list-item"
-              }
-              onClick={() => {
-                setActiveChatId(c._id);
-                setIsMobileMenuOpen(false); // Close the sidebar when a chat is selected.
-              }}
-            >
-              {c.title}
+            <li key={c._id}>
+              <button
+                type="button"
+                className={
+                  c._id === activeChatId
+                    ? "chat__list-item chat__list-item_active"
+                    : "chat__list-item"
+                }
+                aria-current={c._id === activeChatId ? "true" : undefined}
+                title={c.title}
+                onClick={() => {
+                  setActiveChatId(c._id);
+                  setIsMobileMenuOpen(false); // Close the sidebar when a chat is selected.
+                }}
+              >
+                {c.title}
+              </button>
             </li>
           ))}
         </ul>
@@ -302,6 +321,7 @@ export default function Chat() {
             </ul>
             <div className="chat__input-bar">
               <textarea
+                ref={inputRef}
                 className="chat__input"
                 placeholder="Ask any question"
                 rows={1}
