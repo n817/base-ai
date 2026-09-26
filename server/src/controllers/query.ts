@@ -7,9 +7,9 @@ import { createEmbedding } from '../utils/embeddings.js';
 import {
   buildContext,
   getClient,
-  LLM_MODEL,
   stripThinking,
 } from '../utils/openai-client.js';
+import { ModelError, resolveModel } from '../utils/models.js';
 import { rankBySimilarity } from '../utils/vector-search.js';
 
 export const queryDocuments = async (req: Request, res: Response) => {
@@ -22,6 +22,21 @@ export const queryDocuments = async (req: Request, res: Response) => {
       error: { message: 'question is required' },
     });
     return;
+  }
+
+  let model: string;
+  try {
+    model = await resolveModel(req.body.model);
+  } catch (err) {
+    if (err instanceof ModelError) {
+      res.status(err.statusCode).json({
+        success: false,
+        data: null,
+        error: { message: err.message },
+      });
+      return;
+    }
+    throw err;
   }
 
   const userId = req.user!.userId;
@@ -41,7 +56,7 @@ export const queryDocuments = async (req: Request, res: Response) => {
   const context = buildContext(ranked);
 
   const response = await getClient().chat.completions.create({
-    model: LLM_MODEL,
+    model,
     messages: [
       {
         role: 'system',

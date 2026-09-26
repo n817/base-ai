@@ -1,0 +1,39 @@
+.model-select {
+  max-width: 200px;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #1c1c1c;
+  background: rgba(28, 28, 28, 0.05) url("../../assets/down.svg") no-repeat
+    right 12px center / 16px;
+  border: none;
+  border-radius: 4px;
+  appearance: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  padding: 8.5px 36px 8.5px 16px;
+}
+
+.model-select:hover {
+  background-color: rgb(150 121 217 / 0.1);
+}
+
+.model-select:disabled {
+  color: rgba(28, 28, 28, 0.5);
+  cursor: default;
+}
+
+.model-select_type_error {
+  max-width: none;
+  color: #e36161;
+  background-image: none;
+  padding-right: 16px;
+}
+
+@media (max-width: 768px) {
+  /* 16px stops iOS from zooming in when the select is focused */
+  .model-select {
+    font-size: 16px;
+  }
+}
