@@ -25,6 +25,16 @@ export type Message = {
   createdAt: string;
 };
 
+export type ChatModel = {
+  id: string;
+  name: string;
+};
+
+export type ModelsResponse = {
+  models: ChatModel[];
+  defaultModel: string;
+};
+
 export type ApiResponse<T> = {
   success: boolean;
   data: T | null;
@@ -133,10 +143,19 @@ export const createChat = async (title: string) => {
   });
 };
 
-// Send message
-export const sendMessage = async (chatId: string, question: string) => {
+// Send message; without a model the server uses its default
+export const sendMessage = async (
+  chatId: string,
+  question: string,
+  model?: string | null,
+) => {
   return request<Message[]>(`${BASE_URL}/chats/${chatId}/messages`, {
     method: "POST",
-    body: JSON.stringify({ question }),
+    body: JSON.stringify(model ? { question, model } : { question }),
   });
+};
+
+// Get chat models available on Nebius (fetched by the server)
+export const getModels = async () => {
+  return request<ModelsResponse>(`${BASE_URL}/models`);
 };

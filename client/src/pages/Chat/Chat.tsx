@@ -14,6 +14,7 @@ import {
 } from "../../utils/api";
 
 import ErrorImg from "../../assets/error.svg";
+import { useModel } from "../../contexts/ModelContext";
 
 type MobileContext = {
   isMobileMenuOpen: boolean;
@@ -41,6 +42,9 @@ export default function Chat() {
   // Mobile sidebar state from AppLayout
   const { isMobileMenuOpen, setIsMobileMenuOpen } =
     useOutletContext<MobileContext>();
+
+  // Global model selection, shared by all chats
+  const { selectedModelId } = useModel();
 
   const navigate = useNavigate();
   const messagesEndRef = useRef<HTMLLIElement>(null);
@@ -137,7 +141,7 @@ export default function Chat() {
     setIsSending(true);
 
     try {
-      const res = await sendMessage(activeChatId, text);
+      const res = await sendMessage(activeChatId, text, selectedModelId);
       if (res.data) {
         setMessages((prev) => [
           ...prev.filter((m) => m._id !== userMessage._id),

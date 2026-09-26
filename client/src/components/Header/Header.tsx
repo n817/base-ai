@@ -2,6 +2,7 @@ import { NavLink } from "react-router";
 
 import { useAuth } from "../../contexts/AuthContext";
 import Logo from "../../assets/logo.svg";
+import ModelSelect from "../ModelSelect/ModelSelect";
 
 import "./Header.css";
 import { useState } from "react";
@@ -61,6 +62,7 @@ export default function Header({
             >
               Chat
             </NavLink>
+            <ModelSelect />
             <div className="header__dropdown">
               {isAccountMenuOpen && (
                 <div

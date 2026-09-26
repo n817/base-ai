@@ -1,7 +1,5 @@
-// Set up the shared Nebius client and LLM model
+// Set up the shared Nebius client
 import OpenAI from 'openai';
-
-export const LLM_MODEL = 'Qwen/Qwen3-30B-A3B-Instruct-2507';
 
 let client: OpenAI;
 

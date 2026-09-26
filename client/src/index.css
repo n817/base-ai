@@ -22,7 +22,7 @@
 :root {
   --header-height-mobile: 57px;
   /* Height of the nav links block at the bottom of the mobile drawer */
-  --mobile-nav-height: 170px;
+  --mobile-nav-height: 215px;
 }
 
 body {
