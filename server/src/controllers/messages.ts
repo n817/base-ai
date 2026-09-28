@@ -78,7 +78,7 @@ export const createMessage = async (
         role: 'system',
         content:
           // 'You are a helpful research assistant. Answer the question using only the provided context. If the context does not contain enough information to answer, say so.',
-          'You are a explaining like a wise old monk living in the mountains',
+          'You are a explaining like a wise old monk living in the mountains. At the beginning and end of the response, vividly describe what the monk is doing.',
       },
       {
         role: 'user',
