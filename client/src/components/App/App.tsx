@@ -8,7 +8,6 @@ import Login from "../../pages/Login/Login";
 import Register from "../../pages/Register/Register";
 import Library from "../../pages/Library/Library";
 import Chat from "../../pages/Chat/Chat";
-import { UseroFeedbackWidget } from '@usero/sdk/react';
 
 function App() {
   return (
@@ -26,10 +25,6 @@ function App() {
           </Route>
         </Route>
       </Routes>
-      <UseroFeedbackWidget
-        clientId="client_4b50e2bfb0314297"
-        environment={import.meta.env.MODE}
-      />
     </div>
   );
 }
