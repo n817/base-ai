@@ -1,5 +1,6 @@
 import "./App.css";
 import { Route, Routes } from "react-router";
+import { UseroFeedbackWidget } from "@usero/sdk/react";
 
 import { ProtectedRoute, PublicRoute } from "../ProtectedRoute/ProtectedRoute";
 import Intro from "../../pages/Intro/Intro";
@@ -25,6 +26,10 @@ function App() {
           </Route>
         </Route>
       </Routes>
+      <UseroFeedbackWidget
+        clientId="client_c607a8e383864478"
+        environment={import.meta.env.MODE}
+      />
     </div>
   );
 }
